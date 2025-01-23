@@ -1,7 +1,7 @@
 // The keyword indicates that the member function
 // isFrequentFlyer is an accessor (only read class data)
 #include <iostream>
-#include<string>
+#include <string>
 enum MealType { NO_PREF, REGULAR, LOW_FAT, VEGETARIAN };
 class Passenger {
 public:
