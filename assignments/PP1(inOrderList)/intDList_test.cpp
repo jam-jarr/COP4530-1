@@ -1,13 +1,12 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 #include "intDList.hpp"
-#include <iostream>
 #include <string>
 using namespace std;
 
 TEST_CASE ("Test cases for intDList")
 {
-    IntDLList myList;
+    IntDList myList;
     
    
     SECTION("output all elemrnts of list")

@@ -1,76 +1,55 @@
-#include "IntDList.h"
-#include <iostream>
-#include <limits>
-using namespace std;
-int nullValue = std::numeric_limits<int>::min(); // Smallest possible int
+// Name: Huy Bui U82390903
+// Description: Implementing a Doubly Linked List
 
-class DNode{
-public:
-    DNode();
-private:
-    int val;
-    DNode* prev;
-    DNode* next;
-    friend class IntDList;
-};
+#include <iostream>
+#include <string>
+#include "DNode.hpp"
+using namespace std;
+
 class IntDList {
 public:
     IntDList();
-    //return its value
-    void addToHead(int);
-    void insertInOrder (int);
-    void addToTail(int);
-    // delete the head and return its value;
+    void addToHead(int v);
+    void insertInOrder(int v);
+    void addToTail(int v);
     int deleteFromHead();
-    // delete the tail and return its value;
     int deleteFromTail();
-    void deleteNode(int);
-    bool isInList(int) const;
+    void deleteNode(int v);
+    bool isInList(int v) const;
     void printAll() const;
-    //This method returns the string of the ordered integers
     string addToString() const;
-private:
-    bool isEmpty() const;
     DNode* head;
     DNode* tail;
+private:
+    bool isEmpty() const;
 };
-/* TODO:
- * Node initialize constructor is wrong: head and tail must be nullptr
- * Function is empty is broken
- * Function insert inOrder is broken
- * All function is missing the check if the linked list is empty or not
- * Function addToString has not been implemented
- * Create a header file for the source file so that it could run unit test
- */
-DNode::DNode(){
-    val = nullValue;
-    prev = nullptr;
-    next = nullptr;
-}
-
-IntDList::IntDList(){
+/// Initialize a new DOubly Linked List
+IntDList::IntDList() {
     head = new DNode;
     tail = new DNode;
     head->next = tail;
     tail->prev = head;
-};
-bool IntDList::isEmpty() const {
-    if (head->next == tail){
-        return true;
-    } else return false;
 }
+/// Check if Linked List is empty
+/// \return true if empty, false if not
+bool IntDList::isEmpty() const {
+    return head->next == tail;
+}
+/// Add value to head of the Linked List
+/// \param v value to be added
 void IntDList::addToHead(int v) {
-    auto* node = new DNode;
+    DNode* node = new DNode;
     node->val = v;
     DNode* temp = head->next;
     head->next = node;
     node->next = temp;
     temp->prev = node;
     node->prev = head;
-};
-
+}
+/// Add value to tail of the Linked List
+/// \param v value to be added
 void IntDList::addToTail(int v) {
-    auto* node = new DNode;
+    DNode* node = new DNode;
     node->val = v;
     DNode* temp = tail->prev;
     tail->prev = node;
@@ -78,70 +57,96 @@ void IntDList::addToTail(int v) {
     temp->next = node;
     node->next = tail;
 }
+/// Add value to the Linked List in order
+/// \param v value to be added
 void IntDList::insertInOrder(int v) {
-    DNode* curr = head;
-    for (; curr->next != nullptr && curr->val < v; curr = curr->next);
-    auto* node = new DNode;
+    DNode* curr = head->next;
+
+    // Find the position where the new value should be inserted
+    while (curr != tail && curr->val < v) {
+        curr = curr->next;
+    }
+
+    // Create new node
+    DNode* node = new DNode;
+    node->val = v;
+
+    // Insert the node before curr
     DNode* prev = curr->prev;
     prev->next = node;
+    node->prev = prev;
     node->next = curr;
     curr->prev = node;
-    node->prev = prev;
 }
+/// Remove value from head of the Linked List
+/// \param v value to be removed
 int IntDList::deleteFromHead() {
-    if (head->next->val == nullValue){
-        return -1;
+    if (isEmpty()) {
+        throw length_error( "Linked List is empty");
     }
-    DNode* temp = head;
+    DNode* temp = head->next;
     int tempVal = temp->val;
-    head = head->next;
+    head->next = temp->next;
+    temp->next->prev = head;
     delete temp;
     return tempVal;
 }
+/// Remove value from tail of the Linked List
+/// \param v value to be removed
 int IntDList::deleteFromTail() {
-    if (tail->prev->val == nullValue){
-        return -1;
+    if (isEmpty()) {
+        throw length_error( "Linked List is empty");
     }
-    DNode* temp = tail;
+    DNode* temp = tail->prev;
     int tempVal = temp->val;
-    tail = tail->prev;
+    tail->prev = temp->prev;
+    temp->prev->next = tail;
     delete temp;
     return tempVal;
 }
+/// Remove specific value from the Linked List
+/// \param v value to be removed
 void IntDList::deleteNode(int v) {
-    for (DNode* curr = head->next; curr->next != nullptr; curr = curr->next){
-        if (curr->val == v){
-            DNode* temp = curr;
+    if (isEmpty()) {
+        throw length_error( "Linked List is empty");
+    }
+    for (DNode* curr = head->next; curr != tail; curr = curr->next) {
+        if (curr->val == v) {
             DNode* prev = curr->prev;
             DNode* next = curr->next;
             prev->next = next;
             next->prev = prev;
-            delete temp;
+            delete curr;
             break;
         }
     }
 }
-
+/// Check if value is in Linked List
+/// \param v value to be checked
 bool IntDList::isInList(int v) const {
-    for (DNode* curr = head->next; curr->next != nullptr; curr = curr->next){
-        if (curr->val == v){
+    for (DNode* curr = head->next; curr != tail; curr = curr->next) {
+        if (curr->val == v) {
             return true;
         }
     }
     return false;
 }
+/// Print all values in the Linked List
 void IntDList::printAll() const {
-    for (DNode* curr = head->next; curr->next != nullptr; curr = curr->next){
-        cout << curr->val << endl;
+    for (DNode* curr = head->next; curr != tail; curr = curr->next) {
+        cout << curr->val << " ";
     }
+    cout << endl;
 }
-
-int main(){
-    IntDList myList;
-    myList.insertInOrder(9);
-    myList.insertInOrder(8);
-    myList.insertInOrder(0);
-    myList.insertInOrder(3);
-    myList.printAll();
-    return 0;
+/// Add all values into a string
+/// \return the string
+string IntDList::addToString() const {
+    if (isEmpty()) {
+        return "";
+    }
+    string vals;
+    for (DNode* curr = head->next; curr != tail; curr = curr->next) {
+        vals += to_string(curr->val);
+    }
+    return vals;
 }
