@@ -1,4 +1,5 @@
 // Name: Huy Bui U82390903
+// Name: Jamie Giarratana U81686143
 // Description: Implementing a Doubly Linked List
 
 #include <iostream>
@@ -7,7 +8,7 @@
 #include "IntDList.hpp"
 using namespace std;
 
-/// Initialize a new DOubly Linked List
+/// Initialize a new Doubly Linked List
 IntDList::IntDList()
 {
     head = new DNode;
