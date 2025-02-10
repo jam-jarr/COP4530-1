@@ -1,6 +1,7 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
-#include "intDList.hpp"
+#include "IntDList.hpp"
+#include <iostream>
 #include <string>
 using namespace std;
 

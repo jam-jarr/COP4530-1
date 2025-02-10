@@ -9,6 +9,8 @@
 using namespace std;
 class IntDList {
 public:
+    IntDList();
+    ~IntDList();
     //return its value
     void addToHead(int v);
     void insertInOrder(int v);
